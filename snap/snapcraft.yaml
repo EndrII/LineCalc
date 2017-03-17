@@ -1,0 +1,26 @@
+name: line-calc 
+version: '1.0' 
+summary: Utility for counting the number of lines in a project.
+description: |
+    With this umbrella you can easily calculate the number of lines of useful and useless code for your project. The program supports the following languages: Java, Java script, c/c++, C#, QML.
+
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict # use 'strict' once you have the right plugs and slots
+
+icon: icon.png
+
+apps:
+  line-calc:
+    command: desktop-launch $SNAP/opt/myapp/LineCalc
+    plugs: [home, unity7, x11]
+
+parts:
+  line-calc :
+    plugin: qmake
+    qt-version: qt5
+    project-files: [LineCalc.pro]
+    source: ./
+    install: |
+     install -d $SNAPCRAFT_PART_INSTALL/opt/myapp
+     install LineCalc $SNAPCRAFT_PART_INSTALL/opt/myapp/LineCalc 
+    after: [desktop-qt5]

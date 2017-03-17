@@ -17,6 +17,7 @@ class mainWin : public QWidget
     Q_OBJECT
 private:
     void DirectFind(const QString&);
+    QLabel *state;
     QPair<int,int> WriteLines(const QFileInfo& info);
     bool testLineComent(const QString&string);
     QVBoxLayout *mainLayiut;

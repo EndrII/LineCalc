@@ -11,10 +11,13 @@ mainWin::mainWin(QWidget *parent)
     goodCod=new QLabel("Utility lines in this project:");
     goodV=new QLabel();
     goodCodValue=0;
+    state=new QLabel("");
+    state->setWordWrap(true);
     OpenB=new QPushButton("Open Folder",this);
     QHBoxLayout *lout=new QHBoxLayout();
     lout->addWidget(all);
     lout->addWidget(allV);
+    mainLayiut->addWidget(state);
     mainLayiut->addLayout(lout);
     lout=new QHBoxLayout();
     lout->addWidget(goodCod);
@@ -25,6 +28,7 @@ mainWin::mainWin(QWidget *parent)
     list.push_back("*.h");
     list.push_back("*.cs");
     list.push_back("*.java");
+    list.push_back("*.js");
     list.push_back("*.qml");
     connect(OpenB,SIGNAL(clicked(bool)),this,SLOT(openFol()));
 }
@@ -63,12 +67,16 @@ QPair<int,int> mainWin::WriteLines(const QFileInfo &info)
 }
 void mainWin::DirectFind(const QString& str)
 {
+    if(str.isEmpty())return ;
     QDir d(str);
     QPair<int,int>  temp;
     d.entryList();
     for(QString st:d.entryList(QDir::Dirs))
-        if(st!="."&&st!="..")
+        if(st!="."&&st!=".."){
             DirectFind(str+"/"+st);
+            state->setText("Research in: "+str);
+            this->repaint();
+        }
     for(QFileInfo inf:d.entryInfoList(list))
     {
         temp=WriteLines(inf);
@@ -82,9 +90,9 @@ void mainWin::DirectFind(const QString& str)
 void mainWin::openFol()
 {
     DirectFind(QFileDialog::getExistingDirectory());
+    state->setText("All done!");
     goodCodValue=0;
     allValue=0;
-
 }
 mainWin::~mainWin()
 {
